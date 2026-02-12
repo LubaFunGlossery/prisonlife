@@ -122,7 +122,6 @@ local State = {
         IgnoreGuards = false,
         IgnorePrisoners = false,
         IgnoreCriminals = false,
-        AutoArrest = false,
         PrisonerTeamNames = {"prisoner", "prison", "inmate"} 
     },
     Look = {
