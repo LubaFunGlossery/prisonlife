@@ -122,6 +122,7 @@ local State = {
         IgnoreGuards = false,
         IgnorePrisoners = false,
         IgnoreCriminals = false,
+        AutoArrest = false,
         PrisonerTeamNames = {"prisoner", "prison", "inmate"} 
     },
     Look = {
@@ -1382,6 +1383,48 @@ end, "IgnorePrisoners")
 createToggle(UI.Components.Combat, "Ignore Criminals", function(val)
     State.Combat.IgnoreCriminals = val
 end, "IgnoreCriminalsHitbox")
+
+createToggle(UI.Components.Combat, "Auto Arrest", function(val)
+    State.Combat._0x5a1f = val
+end, "AutoArrest")
+
+local _0x5a1f = true 
+local _0x2b9e = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ArrestPlayer")
+local _0x11c4 = 10
+
+local function _0x9d32()
+    local _0x7a8b = game.Players.LocalPlayer
+    local _0x4c21 = _0x7a8b.Character and _0x7a8b.Character:FindFirstChild("HumanoidRootPart")
+
+    if not _0x4c21 then return end
+
+    for _, _0x8e92 in game.Players:GetPlayers() do
+        if _0x8e92 == _0x7a8b then continue end
+
+        local _0x33f1 = _0x8e92.Character
+        if not _0x33f1 then continue end
+
+        local _0x00d2 = _0x33f1:FindFirstChild("HumanoidRootPart")
+        local _0x66b5 = _0x33f1:FindFirstChild("Humanoid")
+
+        if _0x00d2 and _0x66b5 and _0x66b5.Health > 0 then
+            if (_0x4c21.Position - _0x00d2.Position).Magnitude <= _0x11c4 then
+                task.spawn(function()
+                    pcall(function()
+                        _0x2b9e:InvokeServer(_0x8e92)
+                    end)
+                end)
+            end
+        end
+    end
+end
+
+task.spawn(function()
+    while _0x5a1f do
+        _0x9d32()
+        task.wait(0.1)
+    end
+end)
 
 ------------------------------------------------
 --// CONFIG SYSTEM
